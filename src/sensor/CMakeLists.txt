@@ -7,7 +7,14 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)  # Add sensor_msgs dependency
 find_package(std_msgs REQUIRED)
 
+find_library(SERIAL_MEGAPI serial_megapi PATHS /usr/local/lib)
+
+if(NOT SERIAL_MEGAPI)
+    message(FATAL_ERROR "Library serial_megapi not found")
+endif()
+
 add_executable(range src/range.cpp)
+target_link_libraries(range ${SERIAL_MEGAPI})
 ament_target_dependencies(range rclcpp sensor_msgs std_msgs)  # Add sensor_msgs dependency
 
 install(TARGETS
